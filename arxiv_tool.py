@@ -2,13 +2,24 @@ import requests
 
 
 def search_arxiv_papers(topic: str, max_results: int = 5) -> dict:
-    query = "+".join(topic.lower().split())
-    for char in list('()"'):
-        if char in query:
-            print(f"Invalid Character '{char}' in query: {query}")
-            raise ValueError(f"Cannot have Character: '{char}' in query: {query}")
+    """
+Search arXiv for recently published papers on a given topic.
+
+Args:
+    topic (str): Topic to search for.
+    max_results (int): Maximum number of papers to retrieve.
+
+Returns:
+    dict: Parsed arXiv response containing paper metadata.
+"""
+    topic = topic.strip().replace( '"'," ")  
+    query = f'"{topic}"'
+    for char in "()":
+        if char in topic:
+            print(f"Invalid character '{char}' found in topic.")
+            raise ValueError(f"Topic cannot contain '{char}'.")
     url = (
-        "http://export.arxiv.org/api/query"
+        "https://export.arxiv.org/api/query"
         f"?search_query=all:{query}"
         f"&max_results={max_results}"
         "&sortBy=submittedDate"
@@ -16,7 +27,7 @@ def search_arxiv_papers(topic: str, max_results: int = 5) -> dict:
     )
     
     print(f"Making request to arxiv API :{url}")
-    resp = requests.get(url)
+    resp = requests.get(url,timeout=10, headers={"User-Agent": "AI-Researcher/1.0 (LangGraph + Ollama)"})
 
     if not resp.ok:
         print(f"ArXiv API request failed: {resp.status_code} - {resp.text}")
@@ -93,4 +104,11 @@ def arxiv_search(topic: str) -> list[dict]:
         print(f"No papers found for topic: {topic}")
         raise ValueError(f"No papers found for topic: {topic}")
     print(f"Found {len(papers['entries'])} papers for topic: {topic}")
-    return papers["entries"]
+    return [
+    {
+        "title": p["title"],
+        "published": p["published"],
+        "pdf_link": p["pdf_link"],
+    }
+    for p in papers["entries"]
+]

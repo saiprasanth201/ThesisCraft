@@ -16,7 +16,11 @@ def read_pdf_from_url(url: str) -> str:
     """
 
     #access pdf via URL
-    response = requests.get(url)
+    response = requests.get(url, timeout=10)
+    if not response.ok:
+        raise ValueError(
+            f"Failed to download PDF: {response.status_code}"
+        )
     # print(response.status_code)
     pdf_file = io.BytesIO(response.content)
     # print (pdf_file)
@@ -56,9 +60,4 @@ if __name__ == "__main__":
 
     print(result[:1000])
     
-    response = requests.get(url, timeout=10)
-
-if not response.ok:
-    raise ValueError(
-        f"Failed to download PDF: {response.status_code}"
-    )
+    

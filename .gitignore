@@ -15,9 +15,10 @@ __pycache__/
 *.out
 *.toc
 texput.log
+.env
 
 # Generated PDFs and TeX files
-
+output/
 # OS files
 .DS_Store
 Thumbs.db
