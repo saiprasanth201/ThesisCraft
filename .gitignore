@@ -1,0 +1,23 @@
+# Virtual Environment
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# VS Code
+.vscode/
+
+# LaTeX temporary files
+*.aux
+*.log
+*.out
+*.toc
+texput.log
+
+# Generated PDFs and TeX files
+
+# OS files
+.DS_Store
+Thumbs.db
