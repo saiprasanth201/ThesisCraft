@@ -38,10 +38,10 @@ def read_pdf_from_url(url: str) -> str:
             print("=" * 80)
             print(f"Page {i+1}/{len(pdf_reader.pages)}")
             print("=" * 80)
-            print(page_text[:300])
+            print(page_text[:100])
             print()
 
-            text += page_text + "\n"
+            text += page_text + "\n" 
         else:
             print("=" * 80)
             print(f"Page {i+1}/{len(pdf_reader.pages)}")
@@ -51,7 +51,9 @@ def read_pdf_from_url(url: str) -> str:
             print()
 
     print(f"Successfully extracted text length: {len(text)} characters")
-    return text.strip()
+    MAX_CHARS = 3000
+    print(f"Returning first {MAX_CHARS} characters to the LLM.")
+    return text[:MAX_CHARS]
 
 if __name__ == "__main__":
     url = "https://arxiv.org/pdf/2306.16913.pdf"
@@ -59,5 +61,6 @@ if __name__ == "__main__":
     result = read_pdf_from_url.invoke({"url": url})
 
     print(result[:1000])
+    
     
     

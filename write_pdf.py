@@ -8,13 +8,24 @@ import shutil
 @tool
 def write_pdf(latex_content: str) -> str:
     """
-    Generates a PDF from the provided LaTeX content.
+    Generate a PDF from a COMPLETE standalone LaTeX document.
 
-    Args:
-        latex_content (str): A valid LaTeX document as a string.
+    The input must be valid LaTeX and include:
+
+    \\documentclass{article}
+
+    ...
+
+    \\begin{document}
+
+    ...
+
+    \\end{document}
+
+    The input must NOT be wrapped inside markdown code fences.
 
     Returns:
-        str: The absolute path to the generated PDF file.
+        Absolute path of the generated PDF.
     """
 
     # Check for available LaTeX compiler
@@ -88,12 +99,18 @@ def write_pdf(latex_content: str) -> str:
     return str(pdf_file)
 
 if __name__ == "__main__":
-    sample = r"""
+
+    latex = r"""
 \documentclass{article}
 \begin{document}
-Hello, AI Researcher!
+Hello AI Researcher!
 \end{document}
 """
 
-    pdf = write_pdf.invoke({"latex_content": sample})
+    pdf = write_pdf.invoke(
+        {
+            "latex_content": latex
+        }
+    )
+
     print(pdf)
